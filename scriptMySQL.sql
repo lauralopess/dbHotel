@@ -63,6 +63,8 @@ insert into funcionarios(nomeFunc, login, senha, email) values ("Laura Lopes", "
 
 insert into funcionarios(nomeFunc, login, senha, email) values ("Felipe Coelho", "felipe", md5("123@senac"), "felipecoelho@gmail.com");
 
+insert into funcionarios(nomeFunc, login, senha, cargo, email) values ("Pedro Rodrigues", "pedrorodrigues", md5("123@senac"), "Gerência", "pedrorodrigues@gmai.com");
+
 
 /* READ */
 /* Ler/Buscar as informações da tabela funcionários */
@@ -71,10 +73,48 @@ select * from funcionarios;
 /* Buscar o login e a senha da tabela funcionarios em que o login seja admin e senha seja admin */
 select login as Login, senha from funcionarios where login = "admin" and senha =md5("admin");
 
+/* Buscar o ID e o nome do funcionário da tabela de funcionarios ordenando o nome alfabeticamente (ascendente, de A - Z) */
+select idFunc as ID_Funcionario, nomeFunc as Nome_Funcionario from funcionarios nomeFunc order by nomeFunc asc;
+
+/* Buscar o ID e o nome do funcionário da tabela de funcionarios ordenando o nome alfabeticamente (descendente, de Z - A) */
+select idFunc as ID_Funcionario, nomeFunc as Nome_Funcionario from funcionarios nomeFunc order by nomeFunc desc;
+
+/* Buscar os campos ID com o apelido ID_Funcionario, nomeFunc com o apelido Nome_Funcionario e cargo com o apelido Cargo_Funcionario
+da tabela funcionarios ordenado de forma descendente (do maior ID para o menor) */ 
+select idFunc as ID_Funcionario, nomeFunc as Nome_Funcionario, cargo as Cargo_Funcionario from funcionarios nomeFunc order by idFunc desc;
+
+/* Buscar os campos ID com apelido ID_Funcionario, nomeFunc com o apelido Nome_Funcionario e cargo com apelido Cargo_Funcionario
+da tabela funcionarios ordenando de forma descendente (do maior ID para o menor)
+(<>) Este sinal significa diferente, also --> (≠) */
+select idFunc as ID_Funcionario, nomeFunc as Nome_Funcionario, cargo as Cargo_Funcionario from funcionarios where cargo <> 'null' order by idFunc desc;
+
+select * from funcionarios where cargo = 'Gerência' order by idFunc asc;
+
 
 /* UPDATE */
 update funcionarios set login = "felipecoelho" where idFunc = 8;
 
-update funcionarios set cargo = "Gerência" where idFunc = 5;
+update funcionarios set cargo = "Gerência" where idFunc = 4;
 
 /* update funcionarios set email = "lauralopes@gmail.com" where idFunc = 5; */
+
+/* DELETE */
+delete from funcionarios where idFunc = 6;
+
+
+create table quartos (
+	idQuarto int primary key auto_increment,
+    andar varchar(10) not null,
+    tipoQuarto varchar(50) not null,
+    ocupacaoMax int not null,
+    situacao char(3) not null,
+    nome varchar(50) not null,
+    descricao text,
+    preco decimal(10,2) not null,
+    tipoCama varchar(20),
+    varanda char(3)
+);
+
+describe quartos;
+
+alter table quartos add column numeroQuarto varchar(10) not null after andar;
