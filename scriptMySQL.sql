@@ -102,6 +102,8 @@ update funcionarios set cargo = "Gerência" where idFunc = 4;
 delete from funcionarios where idFunc = 6;
 
 
+
+
 create table quartos (
 	idQuarto int primary key auto_increment,
     andar varchar(10) not null,
@@ -117,4 +119,47 @@ create table quartos (
 
 describe quartos;
 
+select * from quartos;
+
 alter table quartos add column numeroQuarto varchar(10) not null after andar;
+alter table quartos add column cafeDaManha char(3) not null after preco;
+alter table quartos add column foto varchar(255) not null after descricao;
+
+insert into quartos (andar, numeroQuarto, tipoQuarto, ocupacaoMax, situacao, nome, descricao, preco, tipoCama, varanda) values ("5º", "505", "Superior Premier", 3, "não", "Familiar", "O quarto de 32m² com piso frio, varanda - vista para o mar. Oferece ar condicionado individual, TV LCD 42'', wi-fi grátis, cofre digital, frigobar abastecido e banheiro com secador de cabelo e amenities e mesa de trabalho.",  750.90, "Queen Size, Solteiro", "sim");
+
+insert into quartos (andar, numeroQuarto, tipoQuarto, ocupacaoMax, situacao, nome, descricao, foto, preco, cafeDaManha, tipoCama, varanda) values ("3º", "308", "Suíte Júnior", 2, "sim", "Casal", "Esta suíte com ar-condicionado dispõe de 1 quarto e 1 banheiro com chuveiro e secador de cabelo. A acomodação conta com frigobar, cofre e TV. A unidade tem 2 camas. Suíte privativa 50 m²", "https://pousadaportomare.com.br/wp-content/uploads/2022/08/tipos-de-quarto.jpg",  680.50, "Sim", "King Size", "não"); 
+
+insert into quartos (andar, numeroQuarto, tipoQuarto, ocupacaoMax, situacao, nome, descricao, foto, preco, cafeDaManha, tipoCama, varanda) values ("2º", "210", "Suíte", 1, "não", "Solteiro", "Esta suíte com ar-condicionado dispõe de 1 quarto e 1 banheiro com chuveiro e secador de cabelo. A acomodação conta com frigobar, cofre e TV. A unidade tem 1 cama. Suíte privativa 50 m²", "https://classic.exame.com/wp-content/uploads/2016/12/03-quartos-pequenos-hotel-howard.jpg?quality=70&strip=info&w=680", 357.90, "Não", "Solteiro", "sim");
+
+insert into quartos (andar, numeroQuarto, tipoQuarto, ocupacaoMax, situacao, nome, descricao, foto, preco, cafeDaManha, tipoCama, varanda) values ("5º", "560", "Superior Triplo", 3, "sim", "Triplo", "Este quarto tem 2 camas de solteiro ou 1 cama de casal e 1 cama extra. Inclui uma pequena varanda com vista lateral da cidade, ar-condicionado, TV de tela plana com canais a cabo, frigobar e banheiro privativo com produtos de banho. O Wi-Fi grátis está à sua disposição.", "https://cf.bstatic.com/xdata/images/hotel/max1024x768/290904715.jpg?k=2157e322e872fc357cdf71612a1b4bcd40f306d4bcad1d8604b88172de3da127&o=&hp=1", 958.70, "sim", "Solteiro ou casal", "sim");
+
+
+update quartos set tipoCama = "Queen Size, Solteiro" where idQuarto = 1;
+
+update quartos set cafeDaManha = "sim" where idQuarto = 1;
+update quartos set foto = "https://www.pacoteshyatt.com.br/wp-content/uploads/2018/08/hotel-hyatt-sao-paulo.jpg" where idQuarto = 1;
+
+select * from quartos where situacao = 'não';
+select * from quartos where situacao = "não" and cafeDaManha = "sim";
+select * from quartos where situacao = "não" and cafeDaManha = "sim" and varanda = "sim";
+select * from quartos where preco < 700.00 and situacao = "não";
+select * from quartos where situacao = "não" order by preco asc;
+
+
+
+create table clientes (
+	idCliente int primary key auto_increment,
+    nomeCompleto varchar(100) not null,
+    cpf char(14) not null unique,
+    rg char(12)  not null unique,
+    email varchar(50) unique,
+    celular varchar(20) not null,
+    numeroCartao varchar(20) not null unique,
+    nomeTitular varchar(100) not null,
+    validade date not null,
+    cvv char(3) not null,
+    checkin datetime not null,
+    checkout datetime not null,
+    idQuarto int not null,
+    foreign key (idQuarto) references quartos (idQuarto)
+);
