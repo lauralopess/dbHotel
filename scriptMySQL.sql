@@ -121,6 +121,7 @@ describe quartos;
 
 select * from quartos;
 
+
 alter table quartos add column numeroQuarto varchar(10) not null after andar;
 alter table quartos add column cafeDaManha char(3) not null after preco;
 alter table quartos add column foto varchar(255) not null after descricao;
@@ -133,13 +134,17 @@ insert into quartos (andar, numeroQuarto, tipoQuarto, ocupacaoMax, situacao, nom
 
 insert into quartos (andar, numeroQuarto, tipoQuarto, ocupacaoMax, situacao, nome, descricao, foto, preco, cafeDaManha, tipoCama, varanda) values ("5º", "560", "Superior Triplo", 3, "sim", "Triplo", "Este quarto tem 2 camas de solteiro ou 1 cama de casal e 1 cama extra. Inclui uma pequena varanda com vista lateral da cidade, ar-condicionado, TV de tela plana com canais a cabo, frigobar e banheiro privativo com produtos de banho. O Wi-Fi grátis está à sua disposição.", "https://cf.bstatic.com/xdata/images/hotel/max1024x768/290904715.jpg?k=2157e322e872fc357cdf71612a1b4bcd40f306d4bcad1d8604b88172de3da127&o=&hp=1", 958.70, "sim", "Solteiro ou casal", "sim");
 
+insert into quartos (andar, numeroQuarto, tipoQuarto, ocupacaoMax, situacao, nome, descricao, foto, preco, cafeDaManha, tipoCama, varanda) values ("3º", "319", "Superior Luxo", 2, "não", "Casal", "Esta suíte com ar-condicionado dispõe de 1 quarto e 1 banheiro com chuveiro e secador de cabelo. A acomodação conta com frigobar, cofre e TV. A unidade tem 1 cama. Suíte privativa 50 m²", "https://classic.exame.com/wp-content/uploads/2016/12/03-quartos-pequenos-hotel-howard.jpg?quality=70&strip=info&w=680", 890.90, "sim", "King Size", "sim");
+
 
 update quartos set tipoCama = "Queen Size, Solteiro" where idQuarto = 1;
 
 update quartos set cafeDaManha = "sim" where idQuarto = 1;
 update quartos set foto = "https://www.pacoteshyatt.com.br/wp-content/uploads/2018/08/hotel-hyatt-sao-paulo.jpg" where idQuarto = 1;
 
+/* Verificar quais quartos estejam disponíveis */
 select * from quartos where situacao = 'não';
+
 select * from quartos where situacao = "não" and cafeDaManha = "sim";
 select * from quartos where situacao = "não" and cafeDaManha = "sim" and varanda = "sim";
 select * from quartos where preco < 700.00 and situacao = "não";
@@ -163,3 +168,29 @@ create table clientes (
     idQuarto int not null,
     foreign key (idQuarto) references quartos (idQuarto)
 );
+
+describe clientes;
+
+insert into clientes (nomeCompleto, cpf, rg, email, celular, numeroCartao, nomeTitular, validade, cvv, checkin, checkout, idQuarto) values
+("José de Assis", "829.942.570-09", "48.353.888-7","josédeassis@gmail.com", "(96) 99338-2803", "5526 4863 8286 2543", "José de Assis", "2025-03-24",  
+"452", "2023-11-02 14:00:00", "2023-11-05 12:00:00", 1);
+
+insert into clientes (nomeCompleto, cpf, rg, email, celular, numeroCartao, nomeTitular, validade, cvv, checkin, checkout, idQuarto) values
+("Diogo Pietro Juan Novaes", "234.637.687-63", "39.885.708-8", "diogopietronovaes@gmail.com.br", "(65) 99170-4378", "5581 4042 4818 9045", "Diogo Pietro Juan Novaes", "2024-05-24",
+"737", "2023-12-29 18:00:12", "2024-01-05 14:00:37", 2);
+
+insert into clientes (nomeCompleto, cpf, rg, email, celular, numeroCartao, nomeTitular, validade, cvv, checkin, checkout, idQuarto) values 
+("Mariah Clarice Gomes", "074.783.551-96", "26.469.491-0", "mariah_gomes@gmail.com", "(65) 98664-3479", "5484 0133 2116 5075", "Mariah Clarice Gomes", "2024-03-24", 
+"834", "2023-12-23 17:30:24", "2024-01-03 19:00:32", 5);
+
+select * from clientes;
+
+/* Buscar o nome completo e o celular do cliente que alugou o quarto de número 505, pois a tabela está vinculada à tabela clientes pelo campo idQuarto */
+select clientes.nomeCompleto, clientes.celular from quartos inner join clientes on quartos.idQuarto = clientes.idQuarto where numeroQuarto = 505;
+
+/* Buscar TODAS AS INFORMAÇÕES da tabela quartos que está vinculada à tabela clientes pelo campo idQuarto */
+select * from quartos inner join clientes on quartos.idQuarto = clientes.idQuarto where numeroQuarto = 505;
+
+/* Buscar o nome completo e data/horário do checkout do cliente que alugou o quarto de número 505 */
+select clientes.nomeCompleto, date_format(clientes.checkout, '%d/%m/%Y - %H:%i') as Checkout from quartos inner join clientes on quartos.idQuarto = clientes.idQuarto where numeroQuarto = 505;
+
