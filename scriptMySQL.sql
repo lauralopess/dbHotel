@@ -132,12 +132,17 @@ create table reservas (
     checkout datetime not null
 );
 
-describe reservas;
+describe quartos;
 
 insert into reservas (idPedido, idQuarto, checkin, checkout) values (1, 1, "2023-11-02 14:00:00", "2023-11-05 12:00:00");
 insert into reservas (idPedido, idQuarto, checkin, checkout) values (1, 5, "2023-11-02 14:00:00", "2023-11-05 12:00:00");
+insert into reservas (idPedido, idQuarto, checkin, checkout) values (2, 2, "2023-10-17 14:00:00", "2023-10-23 12:00:00");
 
 select * from reservas;
-select reservas.idReserva, pedido.idPedido, quartos.idQuarto, quartos.nome, quartos.andar, quartos.numeroQuarto
-from (reservas inner join pedido on reservas.idPedido = pedido.idPedido)
+
+select nomeCompleto, cpf, email, pedido.idPedido, dataPedido, tipoQuarto, nome, andar, numeroQuarto, preco, checkin, checkout
+from clientes inner join pedido on clientes.idCliente = pedido.idCliente
+inner join reservas on reservas.idPedido = pedido.idPedido
 inner join quartos on reservas.idQuarto = quartos.idQuarto;
+
+select sum(quartos.preco) as Total from reservas inner join quartos on reservas.idQuarto = quartos.idQuarto where idPedido = 1;
