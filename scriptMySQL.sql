@@ -36,14 +36,13 @@ select idFunc as ID_Funcionario, nomeFunc as Nome_Funcionario, cargo as Cargo_Fu
 select * from funcionarios where cargo = 'Gerência' order by idFunc asc;
 
 
-
 create table quartos (
 	idQuarto int primary key auto_increment,
     andar varchar(10) not null,
     numeroQuarto varchar(10) not null,
     tipoQuarto varchar(50) not null,
     ocupacaoMax int not null,
-    situacao char(3) not null,
+    disponibilidade char(3) not null,
     nome varchar(50) not null,
     descricao text,
     foto varchar(255) not null,
@@ -56,32 +55,32 @@ create table quartos (
 
 describe quartos;
 
-insert into quartos (andar, numeroQuarto, tipoQuarto, ocupacaoMax, situacao, nome, descricao, foto, preco, cafeDaManha, precoCafe, tipoCama, varanda) values 
+insert into quartos (andar, numeroQuarto, tipoQuarto, ocupacaoMax, disponibilidade, nome, descricao, foto, preco, cafeDaManha, precoCafe, tipoCama, varanda) values 
 ("5º", "505", "Superior Premier", 3, "não", "Familiar", "O quarto de 32m² com piso frio, varanda - vista para o mar. Oferece ar condicionado individual, TV LCD 42'', 
 wi-fi grátis, cofre digital, frigobar abastecido e banheiro com secador de cabelo e amenities e mesa de trabalho.", "https://www.pacoteshyatt.com.br/wp-content/uploads/2018/08/hotel-hyatt-sao-paulo.jpg", 
 750.90, "sim", 60.00, "Queen Size, Solteiro", "sim");
-insert into quartos (andar, numeroQuarto, tipoQuarto, ocupacaoMax, situacao, nome, descricao, foto, preco, cafeDaManha, precoCafe, tipoCama, varanda) values 
+insert into quartos (andar, numeroQuarto, tipoQuarto, ocupacaoMax, disponibilidade, nome, descricao, foto, preco, cafeDaManha, precoCafe, tipoCama, varanda) values 
 ("3º", "308", "Suíte Júnior", 2, "sim", "Casal", "Esta suíte com ar-condicionado dispõe de 1 quarto e 1 banheiro com chuveiro e secador de cabelo. 
 A acomodação conta com frigobar, cofre e TV. A unidade tem 2 camas. Suíte privativa 50 m²", "https://pousadaportomare.com.br/wp-content/uploads/2022/08/tipos-de-quarto.jpg",  
 680.50, "Sim", 60.00, "King Size", "não"); 
-insert into quartos (andar, numeroQuarto, tipoQuarto, ocupacaoMax, situacao, nome, descricao, foto, preco, cafeDaManha, tipoCama, varanda) values 
+insert into quartos (andar, numeroQuarto, tipoQuarto, ocupacaoMax, disponibilidade, nome, descricao, foto, preco, cafeDaManha, tipoCama, varanda) values 
 ("2º", "210", "Suíte", 1, "não", "Solteiro", "Esta suíte com ar-condicionado dispõe de 1 quarto e 1 banheiro com chuveiro e secador de cabelo. A acomodação conta com frigobar, cofre e TV. A unidade tem 1 cama. 
 Suíte privativa 50 m²", "https://classic.exame.com/wp-content/uploads/2016/12/03-quartos-pequenos-hotel-howard.jpg?quality=70&strip=info&w=680", 357.90, "Não", "Solteiro", "sim");
-insert into quartos (andar, numeroQuarto, tipoQuarto, ocupacaoMax, situacao, nome, descricao, foto, preco, cafeDaManha, precoCafe, tipoCama, varanda) values 
+insert into quartos (andar, numeroQuarto, tipoQuarto, ocupacaoMax, disponibilidade, nome, descricao, foto, preco, cafeDaManha, precoCafe, tipoCama, varanda) values 
 ("5º", "560", "Superior Triplo", 3, "sim", "Triplo", "Este quarto tem 2 camas de solteiro ou 1 cama de casal e 1 cama extra. Inclui uma pequena varanda com vista lateral da cidade, ar-condicionado, 
 TV de tela plana com canais a cabo, frigobar e banheiro privativo com produtos de banho. O Wi-Fi grátis está à sua disposição.", 
 "https://cf.bstatic.com/xdata/images/hotel/max1024x768/290904715.jpg?k=2157e322e872fc357cdf71612a1b4bcd40f306d4bcad1d8604b88172de3da127&o=&hp=1", 958.70, "sim", 60.00, "Solteiro ou casal", "sim");
-insert into quartos (andar, numeroQuarto, tipoQuarto, ocupacaoMax, situacao, nome, descricao, foto, preco, cafeDaManha, precoCafe, tipoCama, varanda) values 
+insert into quartos (andar, numeroQuarto, tipoQuarto, ocupacaoMax, disponibilidade, nome, descricao, foto, preco, cafeDaManha, precoCafe, tipoCama, varanda) values 
 ("3º", "319", "Superior Luxo", 2, "não", "Casal", "Esta suíte com ar-condicionado dispõe de 1 quarto e 1 banheiro com chuveiro e secador de cabelo. A acomodação conta com frigobar, cofre e TV. 
 A unidade tem 1 cama. Suíte privativa 50 m²", "https://classic.exame.com/wp-content/uploads/2016/12/03-quartos-pequenos-hotel-howard.jpg?quality=70&strip=info&w=680", 890.90, "sim", 60.00, "King Size", "sim");
 
 select * from quartos;
-select * from quartos where situacao = 'não';
+select * from quartos where disponibilidade = 'não';
 select * from quartos where cafeDaManha = "sim";
-select * from quartos where situacao = "não" and cafeDaManha = "sim";
-select * from quartos where situacao = "não" and cafeDaManha = "sim" and varanda = "sim";
+select * from quartos where disponibilidade = "não" and cafeDaManha = "sim";
+select * from quartos where disponibilidade = "não" and cafeDaManha = "sim" and varanda = "sim";
 select * from quartos where preco < 700.00 and situacao = "não";
-select * from quartos where situacao = "não" order by preco asc;
+select * from quartos where disponibilidade = "não" order by preco asc;
 
 
 
@@ -145,4 +144,28 @@ from clientes inner join pedido on clientes.idCliente = pedido.idCliente
 inner join reservas on reservas.idPedido = pedido.idPedido
 inner join quartos on reservas.idQuarto = quartos.idQuarto;
 
+/*Soma total do pedido feito pelo cliente */
 select sum(quartos.preco) as Total from reservas inner join quartos on reservas.idQuarto = quartos.idQuarto where idPedido = 1;
+
+/* Buscar o nome do cliente, andar, número do quarto e checkout somente daqueles
+cuja data do checkout já passou ou é igual à data do sistema */ 
+select nomeCompleto, andar, numeroQuarto, checkout
+from clientes inner join pedido on clientes.idCliente = pedido.idCliente
+inner join reservas on reservas.idPedido = pedido.idPedido
+inner join quartos on reservas.idQuarto = quartos.idQuarto where checkout <= current_timestamp();
+
+select * from quartos;
+
+/* Atualizar a disponibilidade do quarto somente daqueles cuja data do checkout já passou ou é igual à data do sistema */
+update reservas inner join quartos on reservas.idQuarto = quartos.idQuarto
+set quartos.disponibilidade = "sim" where reservas.checkout < current_timestamp();
+
+/* Buscar o nome do cliente, andar, número do quarto, checkout (com data formatada em 99/99/9999) e
+o cálculo de quantos dias faltam para a reserva do cliente encerrar (dias restantes = data do checkout - data de hoje) */
+select nomeCompleto, andar, numeroQuarto, date_format(checkout, '%d/%m/%Y') as checkout,
+datediff(checkout, curdate()) as dias_restantes from clientes inner join pedido 
+on clientes.idCliente = pedido.idCliente inner join reservas on reservas.idPedido = pedido.idPedido
+inner join quartos on reservas.idQuarto = quartos.idQuarto where checkout > current_timestamp();
+
+
+
